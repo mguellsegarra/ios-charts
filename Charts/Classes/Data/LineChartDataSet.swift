@@ -26,6 +26,8 @@ public class LineChartDataSet: LineRadarChartDataSet
     public var lineDashPhase = CGFloat(0.0)
     public var lineDashLengths: [CGFloat]!
     
+    public var gradientPositions = [CGFloat]()
+    
     /// formatter for customizing the position of the fill-line
     private var _fillFormatter: ChartFillFormatter = BarLineChartFillFormatter()
     
@@ -34,6 +36,9 @@ public class LineChartDataSet: LineRadarChartDataSet
     
     /// if true, cubic lines are drawn instead of linear
     public var drawCubicEnabled = false
+    
+    /// if true, gradient colors are drawn
+    public var drawGradientEnabled = false
     
     public var drawCircleHoleEnabled = true
     
@@ -103,6 +108,8 @@ public class LineChartDataSet: LineRadarChartDataSet
     
     public var isDrawCubicEnabled: Bool { return drawCubicEnabled; }
     
+    public var isDrawGradientEnabled: Bool { return drawGradientEnabled; }
+    
     public var isDrawCircleHoleEnabled: Bool { return drawCircleHoleEnabled; }
     
     /// Sets a custom FillFormatter to the chart that handles the position of the filled-line for each DataSet. Set this to null to use the default logic.
@@ -125,6 +132,25 @@ public class LineChartDataSet: LineRadarChartDataSet
         }
     }
     
+    public func resetGradientPositions()
+    {
+        gradientPositions.removeAll(keepCapacity: false)
+    }
+    
+    public func addGradientPositions(position: CGFloat)
+    {
+        gradientPositions.append(position)
+    }
+    
+    public func gradientPositionAt(var index: Int) -> CGFloat
+    {
+        if (index < 0)
+        {
+            index = 0
+        }
+        return gradientPositions[index % gradientPositions.count]
+    }
+    
     // MARK: NSCopying
     
     public override func copyWithZone(zone: NSZone) -> AnyObject
@@ -137,6 +163,7 @@ public class LineChartDataSet: LineRadarChartDataSet
         copy.lineDashLengths = lineDashLengths
         copy.drawCirclesEnabled = drawCirclesEnabled
         copy.drawCubicEnabled = drawCubicEnabled
+        copy.drawGradientEnabled = drawGradientEnabled
         return copy
     }
 }
